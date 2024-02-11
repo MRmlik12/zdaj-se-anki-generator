@@ -1,0 +1,1 @@
+# Zdaj.se Anki Generator
