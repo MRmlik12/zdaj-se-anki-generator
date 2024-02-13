@@ -6,12 +6,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Types.fs" />
+    <Compile Include="Generator.fs" />
+    <Compile Include="Arguments.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Anki.NET" Version="2.0.0" />
     <PackageReference Include="Argu" Version="6.1.5" />
     <PackageReference Update="FSharp.Core" Version="8.0.101" />
+    <PackageReference Include="FSharp.Json" Version="0.4.1" />
   </ItemGroup>
 
 </Project>
