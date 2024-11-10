@@ -8,7 +8,10 @@ let private REPOSITORY = "bibixx/zdaj-se-pjatk-data"
 
 [<JsonFSharpConverter>]   
 type Subject = {
+    [<JsonPropertyName("id")>]
     Id: string
+    
+    [<JsonPropertyName("title")>]
     Title: string
     
     [<JsonPropertyName("questionsCount")>]
@@ -17,6 +20,7 @@ type Subject = {
 
 [<JsonFSharpConverter>]   
 type Index = {
+    [<JsonPropertyName("pages")>]
     Pages: Subject list
 }
 // [<JsonFSharpConverter>] 
@@ -46,20 +50,3 @@ let fetchSubjects () = async {
         
     return deserializeJson
 }
-
-// let fetchBlobFiles() = async {
-//     let! deserializeJsonAsync =
-//         http {
-//             GET REPOSITORY
-//             Accept "application/vnd.github+json"
-//             header "X-GitHub-Api-Version" "2022-11-28"
-//             header "User-Agent" "curl/7.72.0"
-//         }
-//         |> Request.sendAsync
-//
-//     let! deserializeJson = deserializeJsonAsync
-//                             |> Response.deserializeJsonAsync<GithubBlobFile list>
-//         
-//     return deserializeJson
-// }
-    
