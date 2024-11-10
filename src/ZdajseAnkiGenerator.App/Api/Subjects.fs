@@ -1,7 +1,12 @@
 module ZdajseAnkiGenerator.App.Api.Subjects
 
+open System
+open System.Net.Http
+open System.Net.Http.Json
 open System.Text.Json.Serialization
-open FsHttp
+
+[<Literal>]
+let private GITHUB_URL = "https://raw.githubusercontent.com/"
     
 [<Literal>]
 let private REPOSITORY = "bibixx/zdaj-se-pjatk-data"
@@ -23,30 +28,13 @@ type Index = {
     [<JsonPropertyName("pages")>]
     Pages: Subject list
 }
-// [<JsonFSharpConverter>] 
-// type public GithubBlobFile = {
-//     Name: string
-//     Path: string
-//     Sha: string
-//     Url: string
-//     
-//     [<JsonPropertyName("download_url")>]
-//     DownloadUrl: string option
-//     
-//     [<JsonPropertyName("type")>]
-//     BlobType: string
-// }
 
 let fetchSubjects () = async {
-    let! deserializeJsonAsync =
-        http {
-            GET $"https://raw.githubusercontent.com/{REPOSITORY}/refs/heads/master/index.json"
-            Accept "aapplication/json"
-            header "User-Agent" "curl/7.72.0"
-        }
-        |> Request.sendAsync
-    let! deserializeJson = deserializeJsonAsync
-                            |> Response.deserializeJsonAsync<Index>
-        
-    return deserializeJson
+    use client = new HttpClient()
+    client.BaseAddress <- Uri(GITHUB_URL)
+    let! response = client.GetAsync($"{REPOSITORY}/refs/heads/master/index.json") |> Async.AwaitTask
+    
+    let! deserializedIndex = response.Content.ReadFromJsonAsync<Index>() |> Async.AwaitTask
+    
+    return deserializedIndex
 }
