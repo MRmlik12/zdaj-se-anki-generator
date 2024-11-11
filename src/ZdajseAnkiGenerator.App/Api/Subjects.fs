@@ -2,8 +2,7 @@ module ZdajseAnkiGenerator.App.Api.Subjects
 
 open System
 open System.Net.Http
-open System.Net.Http.Json
-open System.Text.Json.Serialization
+open FSharp.Json
 
 [<Literal>]
 let private GITHUB_URL = "https://raw.githubusercontent.com/"
@@ -11,21 +10,19 @@ let private GITHUB_URL = "https://raw.githubusercontent.com/"
 [<Literal>]
 let private REPOSITORY = "bibixx/zdaj-se-pjatk-data"
 
-[<JsonFSharpConverter>]   
 type Subject = {
-    [<JsonPropertyName("id")>]
+    [<JsonField("id")>]
     Id: string
     
-    [<JsonPropertyName("title")>]
+    [<JsonField("title")>]
     Title: string
     
-    [<JsonPropertyName("questionsCount")>]
+    [<JsonField("questionsCount")>]
     QuestionsCount: int32
 }   
 
-[<JsonFSharpConverter>]   
 type Index = {
-    [<JsonPropertyName("pages")>]
+    [<JsonField("pages")>]
     Pages: Subject list
 }
 
@@ -34,7 +31,8 @@ let fetchSubjects () = async {
     client.BaseAddress <- Uri(GITHUB_URL)
     let! response = client.GetAsync($"{REPOSITORY}/refs/heads/master/index.json") |> Async.AwaitTask
     
-    let! deserializedIndex = response.Content.ReadFromJsonAsync<Index>() |> Async.AwaitTask
+    let! jsonContent = response.Content.ReadAsStringAsync() |> Async.AwaitTask
+    let deserializedIndex = Json.deserialize<Index> jsonContent
     
     return deserializedIndex
 }

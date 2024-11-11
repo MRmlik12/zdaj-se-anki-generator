@@ -2,6 +2,7 @@ open System.Runtime.Versioning
 open App
 open Avalonia
 open Avalonia.Browser
+open Avalonia.Logging
 
 module Program =
     [<assembly: SupportedOSPlatform("browser")>]
@@ -11,6 +12,7 @@ module Program =
     let buildAvaloniaApp () = 
         AppBuilder
             .Configure<App>()
+            .LogToTrace(LogEventLevel.Verbose)
 
     [<EntryPoint>]
     let main argv =
