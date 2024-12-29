@@ -1,23 +1,15 @@
 ﻿module App
 
-open System.Text.Json
-open System.Text.Json.Serialization
 open Avalonia
 open Avalonia.Controls
 open Avalonia.Controls.ApplicationLifetimes
 open Avalonia.Themes.Fluent
 open MainView
 
-// FsHttp.GlobalConfig.Json.defaultJsonSerializerOptions <-
-//     let options = JsonSerializerOptions()
-//     options.Converters.Add(JsonFSharpConverter())
-//     options.PropertyNamingPolicy <- JsonNamingPolicy.SnakeCaseLower
-//     options 
-
 type MainView() as this =
     inherit UserControl()
     do
-        base.Content <- view()
+        base.Content <- view this
 
 type MainWindow() =
     inherit Window()

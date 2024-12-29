@@ -17,3 +17,13 @@ type Schema = {
     title: string
     data: QuizData array
 }
+
+type Subject = {
+    id: string
+    title: string
+    questionsCount: int32
+}   
+
+type Index = {
+    pages: Subject list
+}

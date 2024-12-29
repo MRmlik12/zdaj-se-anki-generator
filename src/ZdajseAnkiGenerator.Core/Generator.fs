@@ -15,8 +15,7 @@ let getParsedSchema (path : string) = task {
 
 let sanitizeValue (value : string) = value.Replace(@"""", @"\""").Replace("'", @"''");
 
-let generateDeck (jsonPath : string, outputPath : string) = async {
-    let! schema = getParsedSchema jsonPath |> Async.AwaitTask
+let generateDeck (schema : Schema) = async {
     let cardType = AnkiCardType("Basic", 0, "{{Front}}", "{{Front}}<hr id=\"answer\">{{Back}}")
     
     let noteType = AnkiNoteType(
@@ -33,8 +32,9 @@ let generateDeck (jsonPath : string, outputPath : string) = async {
         let allAnswers = data.answers |> Array.map (fun x -> $"<input type='checkbox'><label>{x.answer}</label><br>") |> String.concat ""
         let correctAnswers = data.answers |> Array.map (fun x -> $"<input type='checkbox' {getChecked x.correct}><label>{x.answer}</label><br>") |> String.concat ""
         collection.CreateNote(deckId, noteTypeId, sanitizeValue(data.question + "<br>" + allAnswers), sanitizeValue(correctAnswers))
-   
-    let! writeResult = AnkiFileWriter.WriteToFileAsync($"{outputPath}/{schema.id}.apkg", collection) |> Async.AwaitTask
-    writeResult
+  
+    let stream = new MemoryStream() 
+    AnkiFileWriter.WriteToStreamAsync(stream, collection) |> Async.AwaitTask |> ignore
+    
+    return stream
 }
- 

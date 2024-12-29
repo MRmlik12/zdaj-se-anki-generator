@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Types.fs" />
+    <Compile Include="Generator.fs" />
+    <Compile Include="Api.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Anki.NET" Version="2.0.0" />
+    <PackageReference Include="FSharp.Json" Version="0.4.1" />
+  </ItemGroup>
+
+</Project>
