@@ -4,9 +4,9 @@ open Avalonia.Controls
 open Avalonia.FuncUI
 open Avalonia.FuncUI.DSL
 open Avalonia.Layout
-open Avalonia.Platform.Storage
 open Types
 open Api
+open Store
     
 [<RequireQualifiedAccess>]
 module AppState =
@@ -75,20 +75,14 @@ let view (window : UserControl) =
                     Button.onClick (fun _ ->
                        task {
                             let selected = selectedItems.Current
-                                            |> List.map (fun x -> x.id )
+                                            |> List.map _.id
                             let! data = selected
                                         |> List.map fetchSubject
                                         |> Async.Parallel
                                         
                             let! stream = Generator.generateDeck(data[0])
-                            let topLevel = TopLevel.GetTopLevel(window)
-                            let! file = topLevel.StorageProvider.SaveFilePickerAsync(FilePickerSaveOptions(Title = "Save deck"))
-                            
-                            if file <> null then
-                                use! fileStream = file.OpenWriteAsync()
-                                stream.Position <- 0L
-                                do! stream.CopyToAsync(fileStream)
-                                fileStream.Close()
+                            if fileServiceInstance.IsSome then
+                                do! fileServiceInstance.Value.SaveFile(stream.ToArray())
                        } |> ignore
                     )
                 ]

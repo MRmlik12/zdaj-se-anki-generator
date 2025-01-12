@@ -5,6 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="FileService.fs" />
+    <Compile Include="Store.fs" />
     <Compile Include="MainView.fs" />
     <Compile Include="App.fs" />
   </ItemGroup>
