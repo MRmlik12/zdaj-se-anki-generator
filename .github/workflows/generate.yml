@@ -13,7 +13,7 @@ jobs:
       - name: Restore project
         run: dotnet restore
       - name: Run deck generation script
-        run: dotnet fsi ./scripts/generate.fsx
+        run: dotnet fsi ./scripts/Generate.fsx
         env:
           DATA_REPOSITORY_PATH: zdaj-se-pjatk-data
       - name: Upload generated decks
