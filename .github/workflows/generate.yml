@@ -10,6 +10,13 @@ jobs:
       - uses: actions/checkout@v4
       - name: Clone bibixx/zdaj-se-pjatk-data repository
         run: git clone --depth 1 https://github.com/bibixx/zdaj-se-pjatk-data
+      - name: Restore cache from NuGet packages 
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.x'
